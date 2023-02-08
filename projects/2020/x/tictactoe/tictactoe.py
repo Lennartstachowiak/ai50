@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -43,7 +44,7 @@ def actions(board):
     moves = []
     for row_index, row in enumerate(board):
         for field_index, field in enumerate(row):
-            if field != X and field != O:
+            if field is EMPTY:
                 moves.append((row_index, field_index))
     return moves
 
@@ -52,9 +53,10 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
+    copy_board = copy.deepcopy(board)
     which_turn = player(board)
-    board[action[0]][action[1]] = which_turn
-    return board
+    copy_board[action[0]][action[1]] = which_turn
+    return copy_board
 
 
 def winner(board):
@@ -98,7 +100,7 @@ def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    if winner(board) != None and len(actions(board)) <= 0:
+    if winner(board) != None or len(actions(board)) <= 0:
         return True
     else:
         return False
@@ -116,20 +118,58 @@ def utility(board):
         return 0
 
 
+def max_value(board, lowest_value):
+    if terminal(board):
+        return utility(board)
+    highest_value = -math.inf
+    for action in actions(board):
+        current_value = min_value(result(board, action), highest_value)
+        highest_value = max(highest_value, current_value)
+    return highest_value
+
+
+def min_value(board, highest_value):
+    if terminal(board):
+        return utility(board)
+    lowest_value = math.inf
+    for action in actions(board):
+        current_value = max_value(result(board, action), lowest_value)
+        lowest_value = min(lowest_value, current_value)
+    return lowest_value
+
+
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
-    copy_board = board.copy()
-    which_turn = player(copy_board)
-    moves = actions(copy_board)
-    print("moves", moves)
-    if len(moves) > 0:
-        for move in moves:
-            new_board = result(copy_board, move)
-            print(new_board)
-            minimax(new_board)
-    print("Done")
+    which_turn = player(board)
+    possible_actions = actions(board)
+
+    if which_turn is X:
+        best_score = -1
+        best_move = None
+        for possible_action in possible_actions:
+            if best_score == 1:
+                return best_move
+            new_board = result(board, possible_action)
+            score = min_value(new_board, best_score)
+            if score > best_score:
+                best_score = score
+                best_move = possible_action
+        return best_move
+
+    if which_turn is O:
+        best_score = 1
+        best_move = None
+        for possible_action in possible_actions:
+            if best_score == -1:
+                return best_move
+            new_board = result(board, possible_action)
+            score = max_value(new_board, best_score)
+            if score < best_score:
+                best_score = score
+                best_move = possible_action
+        return best_move
 
 
 minimax(initial_state())
