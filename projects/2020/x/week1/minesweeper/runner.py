@@ -4,9 +4,9 @@ import time
 
 from minesweeper import Minesweeper, MinesweeperAI
 
-HEIGHT = 8
-WIDTH = 8
-MINES = 8
+HEIGHT = 32
+WIDTH = 32
+MINES = 140
 
 # Colors
 BLACK = (0, 0, 0)
@@ -15,7 +15,7 @@ WHITE = (255, 255, 255)
 
 # Create game
 pygame.init()
-size = width, height = 600, 400
+size = width, height = 1200, 800
 screen = pygame.display.set_mode(size)
 
 # Fonts
@@ -152,6 +152,17 @@ while True:
     pygame.draw.rect(screen, WHITE, resetButton)
     screen.blit(buttonText, buttonRect)
 
+    # AI Solo button
+    aiSoloButton = pygame.Rect(
+        (2 / 3) * width + BOARD_PADDING, (1 / 3) * height - 120,
+        (width / 3) - BOARD_PADDING * 2, 50
+    )
+    buttonText = mediumFont.render("AI Solo", True, BLACK)
+    buttonRect = buttonText.get_rect()
+    buttonRect.center = aiSoloButton.center
+    pygame.draw.rect(screen, WHITE, aiSoloButton)
+    screen.blit(buttonText, buttonRect)
+
     # Display text
     text = "Lost" if lost else "Won" if game.mines == flags else ""
     text = mediumFont.render(text, True, WHITE)
@@ -200,6 +211,59 @@ while True:
             flags = set()
             lost = False
             continue
+
+        elif aiSoloButton.collidepoint(mouse) and not lost and not game.mines == flags:
+            while not lost and not game.mines == flags:
+                move = ai.make_safe_move()
+                if move is None:
+                    move = ai.make_random_move()
+                    if move is None:
+                        flags = ai.mines.copy()
+                        print("No moves left to make.")
+                    else:
+                        print("No known safe moves, AI making random move.")
+                else:
+                    print("AI making safe move.")
+                time.sleep(0.001)
+                if move:
+                    print("current move", move)
+                    if game.is_mine(move):
+                        lost = True
+                    else:
+                        nearby = game.nearby_mines(move)
+                        revealed.add(move)
+                        ai.add_knowledge(move, nearby)
+                cells = []
+                for i in range(HEIGHT):
+                    row = []
+                    for j in range(WIDTH):
+
+                        # Draw rectangle for cell
+                        rect = pygame.Rect(
+                            board_origin[0] + j * cell_size,
+                            board_origin[1] + i * cell_size,
+                            cell_size, cell_size
+                        )
+                        pygame.draw.rect(screen, GRAY, rect)
+                        pygame.draw.rect(screen, WHITE, rect, 3)
+
+                        # Add a mine, flag, or number if needed
+                        if game.is_mine((i, j)) and lost:
+                            screen.blit(mine, rect)
+                        elif (i, j) in flags:
+                            screen.blit(flag, rect)
+                        elif (i, j) in revealed:
+                            neighbors = smallFont.render(
+                                str(game.nearby_mines((i, j))),
+                                True, BLACK
+                            )
+                            neighborsTextRect = neighbors.get_rect()
+                            neighborsTextRect.center = rect.center
+                            screen.blit(neighbors, neighborsTextRect)
+
+                        row.append(rect)
+                    cells.append(row)
+                pygame.display.flip()
 
         # User-made move
         elif not lost:
