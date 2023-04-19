@@ -110,27 +110,23 @@ def iterate_pagerank(corpus, damping_factor):
     """
     all_pages = list(corpus.keys())
     N = len(all_pages)
+    tolerance = 0.01
     first_prob = 1/len(all_pages)
     pages_pr = {page: first_prob for page in all_pages}
     links_to_pages = {page: [] for page in all_pages}
     for page, links_to_other_pages in corpus.items():
         for link in links_to_other_pages:
             links_to_pages[link].append(page)
-    changed = True
-    while changed:
-        page_changed = False
-        for page, links_to_page in links_to_pages.items():
-            page_pr_first_part = (1-damping_factor)/N
-            prop_of_links = 0
-            for i in links_to_page:
-                prop_of_links += pages_pr[i]/len(corpus[i])
-            page_pr_second_part = damping_factor*prop_of_links
-            new_page_pr = page_pr_first_part + page_pr_second_part
-            if pages_pr[page]-0.01 > new_page_pr or new_page_pr > pages_pr[page]+0.01:
-                page_changed = True
+
+    while True:
+        prev_pages_pr = pages_pr.copy()
+        for page, links in links_to_pages.items():
+            prop_of_links = sum(
+                pages_pr[link]/len(corpus[link]) for link in links)
+            new_page_pr = (1-damping_factor)/N + damping_factor*prop_of_links
             pages_pr[page] = new_page_pr
-        if not page_changed:
-            changed = False
+        if all(pages_pr[page]-prev_pages_pr[page] < tolerance for page in all_pages):
+            break
     return pages_pr
 
 
