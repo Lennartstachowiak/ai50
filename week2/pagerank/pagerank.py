@@ -62,7 +62,7 @@ def transition_model(corpus, page, damping_factor):
     all_pages_prob = (1-damping_factor)/all_pages_len
     page_corpus = list(corpus[page])
     page_corpus_len = len(page_corpus)
-    page_corpus_prob = damping_factor/page_corpus_len
+    page_corpus_prob = damping_factor/page_corpus_len if page_corpus_len > 0 else 0
     output = {}
     for page in all_pages:
         page_prob = all_pages_prob
@@ -113,10 +113,13 @@ def iterate_pagerank(corpus, damping_factor):
     tolerance = 0.01
     first_prob = 1/len(all_pages)
     pages_pr = {page: first_prob for page in all_pages}
-    links_to_pages = {page: [] for page in all_pages}
-    for page, links_to_other_pages in corpus.items():
-        for link in links_to_other_pages:
-            links_to_pages[link].append(page)
+    links_to_pages = {page: set() for page in all_pages}
+    for page in corpus.keys():
+        # A page that has no links at all should be interpreted as having one link for every page in the corpus (including itself).
+        if len(corpus[page]) < 1:
+            corpus[page] = set(all_pages)
+        for link in corpus[page]:
+            links_to_pages[link].add(page)
 
     while True:
         prev_pages_pr = pages_pr.copy()
