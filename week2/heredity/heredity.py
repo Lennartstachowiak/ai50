@@ -141,6 +141,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
     """
     p = {}
     for person in people:
+        # Get person data
         person_amount_of_genes = 0
         if person in one_gene:
             person_amount_of_genes = 1
@@ -149,11 +150,12 @@ def joint_probability(people, one_gene, two_genes, have_trait):
         person_has_trait = False
         if person in have_trait:
             person_has_trait = True
-
         father = people[person]["father"]
         mother = people[person]["mother"]
         parents = [mother, father]
+
         if all(parent != None for parent in parents):
+            # Get probability for person with parents
             parent_probs = []
             for parent in parents:
                 if parent in two_genes:
@@ -164,7 +166,7 @@ def joint_probability(people, one_gene, two_genes, have_trait):
                     continue
                 parent_probs.append(PROBS["mutation"])
 
-            # Looking what to add together
+            # Get result of calculation for given gene amount
             if person_amount_of_genes == 0:
                 prob_to_have_gene = (1-parent_probs[0])*(1-parent_probs[1])
             if person_amount_of_genes == 1:
@@ -172,17 +174,15 @@ def joint_probability(people, one_gene, two_genes, have_trait):
                     (1-parent_probs[0])*parent_probs[1]
             if person_amount_of_genes == 2:
                 prob_to_have_gene = parent_probs[0]*parent_probs[1]
+        else:
+            # Get probability for persons without parents
+            prob_to_have_gene = PROBS["gene"][person_amount_of_genes]
 
-            prob_has_trait = PROBS["trait"][person_amount_of_genes][person_has_trait]
-            prob = prob_to_have_gene * prob_has_trait
-            p[person] = prob
-            continue
-
-        prob_to_have_gene = PROBS["gene"][person_amount_of_genes]
         prob_has_trait = PROBS["trait"][person_amount_of_genes][person_has_trait]
         prob = prob_to_have_gene * prob_has_trait
         p[person] = prob
 
+    # Multiply all probabilities of each person together
     p_sum = 1
     for prob in p.values():
         p_sum *= prob
