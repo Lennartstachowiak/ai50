@@ -1,5 +1,5 @@
 import sys
-
+from queue import Queue
 from crossword import *
 
 
@@ -99,7 +99,13 @@ class CrosswordCreator():
         (Remove any values that are inconsistent with a variable's unary
          constraints; in this case, the length of the word.)
         """
-        raise NotImplementedError
+        for variable, values in self.domains.items():
+            removals = []
+            for value in values:
+                if len(value) > variable.length or len(value) < variable.length:
+                    removals.append(value)
+            for removal in removals:
+                values.remove(removal)
 
     def revise(self, x, y):
         """
@@ -110,7 +116,20 @@ class CrosswordCreator():
         Return True if a revision was made to the domain of `x`; return
         False if no revision was made.
         """
-        raise NotImplementedError
+        revised = False
+        i, j = self.crossword.overlaps[x, y]
+        wordToRemove = set()
+        for wordX in self.domains[x]:
+            wordGood = False
+            for wordY in self.domains[y]:
+                if wordX[i] == wordY[j]:
+                    wordGood = True
+            if not wordGood:
+                wordToRemove.add(wordX)
+                revised = True
+        for word in wordToRemove:
+            self.domains[x].remove(word)
+        return revised
 
     def ac3(self, arcs=None):
         """
@@ -121,7 +140,24 @@ class CrosswordCreator():
         Return True if arc consistency is enforced and no domains are empty;
         return False if one or more domains end up empty.
         """
-        raise NotImplementedError
+        if arcs == None:
+            arcs = []
+            for domain in self.domains.keys():
+                neighbors = self.crossword.neighbors(domain)
+                for neighbor in neighbors:
+                    arc = (domain, neighbor)
+                    arcs.append(arc)
+        queue = Queue()
+        for item in arcs:
+            queue.put(item)
+        while not queue.empty():
+            X, Y = queue.get()
+            if self.revise(X, Y):
+                if self.domains == 0:
+                    return False
+                for Z in self.crossword.neighbors(X) - {Y}:
+                    queue.put((Z, X))
+        return True
 
     def assignment_complete(self, assignment):
         """
