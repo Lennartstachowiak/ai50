@@ -182,7 +182,7 @@ class CrosswordCreator():
                 if self.crossword.overlaps[keyX, keyY] == None:
                     continue
                 i, j = self.crossword.overlaps[keyX, keyY]
-                if wordX[i] != wordY[j]:
+                if wordX[i] != wordY[j] or wordX == wordY:
                     return False
         return True
 
