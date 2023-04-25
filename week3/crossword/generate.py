@@ -172,15 +172,18 @@ class CrosswordCreator():
         puzzle without conflicting characters); return False otherwise.
         """
         # length
-        key, word = list(assignment.items())[0]
-        if key.length is not len(word):
-            return False
-        # crossword
-        neighbors = self.crossword.neighbors(key)
-        for neighbor in neighbors:
-            i, j = self.crossword.overlaps[key, neighbor]
-            if all(word[i] is not value[j] for value in self.domains[neighbor]):
+        for valueX in assignment.items():
+            keyX, wordX = valueX
+            if keyX.length is not len(wordX):
                 return False
+            # crossword
+            for valueY in assignment.items() - {valueX}:
+                keyY, wordY = valueY
+                if self.crossword.overlaps[keyX, keyY] == None:
+                    continue
+                i, j = self.crossword.overlaps[keyX, keyY]
+                if wordX[i] != wordY[j]:
+                    return False
         return True
 
     def order_domain_values(self, var, assignment):
@@ -237,8 +240,8 @@ class CrosswordCreator():
             return assignment
         var = self.select_unassigned_variable(assignment)
         for value in self.order_domain_values(var, assignment):
-            if self.consistent({var: value}):
-                assignment[var] = value
+            assignment[var] = value
+            if self.consistent(assignment):
                 result = self.backtrack(assignment)
                 if result is not None:
                     return result
