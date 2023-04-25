@@ -1,31 +1,31 @@
-#### week0 - Search
+# week0 - Search
 
-### Projects
+## Projects
 
-## degrees
+### degrees
 
-# How to start it:
+#### How to start it:
 
-## tictactoe
+### tictactoe
 
-#### week1 - Knowledge
+# week1 - Knowledge
 
-### Projects
+## Projects
 
-## knights
+### knights
 
-## minesweeper
+### minesweeper
 
-#### week2 - Uncertainty
+# week2 - Uncertainty
 
-### Projects
+## Projects
 
-## heredity
+### heredity
 
-## pagerank
+### pagerank
 
-#### week3 - Optimization
+# week3 - Optimization
 
-### Projects
+## Projects
 
-## crossword
+### crossword
