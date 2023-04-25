@@ -179,7 +179,7 @@ class CrosswordCreator():
         neighbors = self.crossword.neighbors(key)
         for neighbor in neighbors:
             i, j = self.crossword.overlaps[key, neighbor]
-            if any(word[i] is not value[j] for value in self.domains[neighbor]):
+            if all(word[i] is not value[j] for value in self.domains[neighbor]):
                 return False
         return True
 
