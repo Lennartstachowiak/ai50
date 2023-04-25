@@ -350,7 +350,7 @@ $ python3 generate.py data/structure2.txt data/words2.txt output2.png
 
 - You can mix up the structure text file and the word text file like `data/structure1.txt data/words2.txt`
 
-* You `output.png` creates a png with the solution.
+* `output.png` creates a png with the solution.
   - Can also be removed from the command if the terminal log is enough.
 
 ### Result logs
