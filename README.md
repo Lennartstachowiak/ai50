@@ -83,8 +83,9 @@ $ python3 runner.py
 
 #### **_Game_**
 
-![tictactoe menu](images/tictactoe0.png)
-![tictactoe game](images/tictactoe1.png)
+| Menu                                     | Ingame                                   |
+| ---------------------------------------- | ---------------------------------------- |
+| ![tictactoe menu](images/tictactoe0.png) | ![tictactoe game](images/tictactoe1.png) |
 
 ## week1 - Knowledge
 
