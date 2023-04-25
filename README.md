@@ -1,3 +1,5 @@
+![tictactoe banner](images/tictactoe.gif)
+
 ## **week0 - Search**
 
 ## degrees
