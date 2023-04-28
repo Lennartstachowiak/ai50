@@ -2,7 +2,7 @@
 
 ## **week0 - Search**
 
-## degrees
+## [degrees](https://cs50.harvard.edu/ai/2020/projects/0/degrees/)
 
 ### _Background_
 
@@ -16,6 +16,7 @@ We can frame this as a search problem: our states are people. Our actions are mo
 
 The distribution code contains two sets of CSV data files:
 
+- It uses BFS or DFS.
 - one set in the large directory
 - one set in the small directory.
   Each contains files with the same names, and the same structure, but small is a much smaller dataset for ease of testing and experimentation.
@@ -59,7 +60,7 @@ Explored Steps: 1801
 3: Bernardo Bertolucci and Federico Fellini starred in Bellissimo: Immagini del cinema italiano
 ```
 
-## tictactoe
+## [tictactoe](https://cs50.harvard.edu/ai/2020/projects/0/tictactoe/)
 
 ### _About_
 
@@ -94,7 +95,7 @@ $ python3 runner.py
 
 ## **week1 - Knowledge**
 
-## knights
+## [knights](https://cs50.harvard.edu/ai/2020/projects/1/knights/)
 
 ### _Background_
 
@@ -137,7 +138,7 @@ Puzzle 3
     C is a Knight
 ```
 
-## minesweeper
+## [minesweeper](https://cs50.harvard.edu/ai/2020/projects/1/minesweeper/)
 
 ### _Background_
 
@@ -174,7 +175,7 @@ $ python3 runner.py
 
 ## **week2 - Uncertainty**
 
-## heredity
+## [heredity](https://cs50.harvard.edu/ai/2020/projects/2/heredity/)
 
 ### _Background_
 
@@ -182,7 +183,7 @@ Mutations in the GJB2 gene can cause hearing impairment in newborns. People carr
 
 Children inherit one copy of the GJB2 gene from each parent. If a parent has two copies of the mutated gene, the child will have it too. If the parent has no copies, the child won't have it. If the parent has one copy, the child has a 50% chance of inheriting it. The gene can also mutate further and change the likelihood of hearing impairment.
 
-We can create a Bayesian Network to model these relationships. Each family member has a Gene variable (0, 1, or 2 copies) and a Trait variable (yes or no for hearing impairment). Genes affect the probability of having a particular trait, and the child's genes depend on the genes of their parents.
+Each family member has a Gene variable (0, 1, or 2 copies) and a Trait variable (yes or no for hearing impairment). Genes affect the probability of having a particular trait, and the child's genes depend on the genes of their parents.
 
 ### _How to start:_
 
@@ -244,7 +245,7 @@ Molly:
 - Gene represents the probability of how likely it is two have how many genes.
 - Trait shows the probabilty of having the disease.
 
-## pagerank
+## [pagerank](https://cs50.harvard.edu/ai/2020/projects/2/pagerank/)
 
 ### _Background_
 
@@ -312,7 +313,7 @@ PageRank Results from Iteration
 
 ## **week3 - Optimization**
 
-## crossword
+## [crossword](https://cs50.harvard.edu/ai/2020/projects/3/crossword/)
 
 ### _Background_
 
@@ -320,7 +321,7 @@ How might you go about generating a crossword puzzle?
 
 Given the structure of a crossword puzzle (i.e., which squares of the grid are meant to be filled in with a letter), and a list of words to use, the problem becomes one of choosing which words should go in each vertical or horizontal sequence of squares.
 
-We can model this sort of problem as a constraint satisfaction problem. Each sequence of squares is one variable, for which we need to decide on its value (which word in the domain of possible words will fill in that sequence). Consider the following crossword puzzle structure.
+We can model this sort of problem as a constraint satisfaction problem. Each sequence of squares is one variable, for which we need to decide on its value (which word in the domain of possible words will fill in that sequence).
 
 ### _How to start:_
 
