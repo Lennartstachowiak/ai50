@@ -373,3 +373,58 @@ $ python3 generate.py data/structure2.txt data/words2.txt output2.png
 ### Result PNG
 
 ![tictactoe game](images/crossword.png)
+
+## **week4 - Learning**
+
+## [nim](https://cs50.harvard.edu/ai/2020/projects/4/nim/)
+
+### _Background_
+
+Nim is a game for tow players. In Nim each player can remove stones from different piles.
+
+The AI uses reinforcement learning to learn the best moves. The AI remembers the best move in every given position and tries to make informed decision what the best future move it. To learn all possible moves it has a probability value known as _epsilon_ to explore random actions. At the inital stage when the AI doesn't know which actions are good to take in every given state, it explores.
+
+### _How to start:_
+
+Go into the directory _"nim"_
+
+```
+$ cd week3/nim/
+```
+
+How to run it:
+
+```
+$ python3 play.py
+```
+
+- You can set how much the AI trains before the match starts in `play.py`
+- If the game started and it is your turn
+  - You choose which pile you want to play
+  - And how many stones you want to remove
+
+### Result logs
+
+```
+Playing training game 10000
+Done training
+
+Piles:
+Pile 0: 1
+Pile 1: 3
+Pile 2: 5
+Pile 3: 7
+
+AI's Turn
+AI chose to take 1 from pile 0.
+
+Piles:
+Pile 0: 0
+Pile 1: 3
+Pile 2: 5
+Pile 3: 7
+
+Your Turn
+Choose Pile: _
+Choose Count: _
+```
